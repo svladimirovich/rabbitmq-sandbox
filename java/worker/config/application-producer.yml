@@ -1,0 +1,8 @@
+spring.profiles: producer
+
+spring.rabbitmq.host: rabbit
+
+rabbit:
+  exchange: example_exch
+  queue: example_queue
+  routingKey: anykey

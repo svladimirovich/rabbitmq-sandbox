@@ -1,0 +1,28 @@
+version: "3.1"
+
+services:
+
+  rabbit:
+    image: rabbitmq:management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  java-consumer:
+    build:
+      dockerfile: Dockerfile
+      context: ./java/worker
+    environment: 
+      - SPRING_PROFILES_ACTIVE=consumer
+    depends_on:
+      - rabbit
+      
+  java-producer:
+    build:
+      dockerfile: Dockerfile
+      context: ./java/worker
+    environment: 
+      - SPRING_PROFILES_ACTIVE=producer
+    depends_on:
+      - rabbit
+  
