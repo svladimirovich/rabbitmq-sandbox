@@ -14,6 +14,9 @@ public class JobConsumer {
 
     @RabbitListener(queues = "${rabbit.queue}")
     public void receiveMessage(final Job job) {
+        try {
+            Thread.sleep(1000);
+        } catch(InterruptedException ie) {}
         log.info("Received job: {}", job.toString());
     }
 }
