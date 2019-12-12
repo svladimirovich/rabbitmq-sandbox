@@ -12,6 +12,8 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./java/worker
+#   volumes:
+#     - maven-repository:/root/.m2
     environment: 
       - SPRING_PROFILES_ACTIVE=consumer
     depends_on:
@@ -21,8 +23,14 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./java/worker
+#   volumes:
+#     - maven-repository:/root/.m2
     environment: 
       - SPRING_PROFILES_ACTIVE=producer
     depends_on:
       - rabbit
-  
+
+      
+# still not working
+# volumes:
+#   maven-repository:
