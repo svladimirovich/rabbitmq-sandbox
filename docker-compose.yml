@@ -7,13 +7,18 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:15672"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 5
 
   java-consumer:
     build:
-      dockerfile: Dockerfile
+      dockerfile: dev.Dockerfile
       context: ./java/worker
-#   volumes:
-#     - maven-repository:/root/.m2
+    # volumes:
+    #   - maven-repository:/root/.m2
     environment: 
       - SPRING_PROFILES_ACTIVE=consumer
     depends_on:
@@ -21,10 +26,10 @@ services:
       
   java-producer:
     build:
-      dockerfile: Dockerfile
+      dockerfile: dev.Dockerfile
       context: ./java/worker
-#   volumes:
-#     - maven-repository:/root/.m2
+    # volumes:
+    #   - maven-repository:/root/.m2
     environment: 
       - SPRING_PROFILES_ACTIVE=producer
     depends_on:
