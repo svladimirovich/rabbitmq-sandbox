@@ -14,13 +14,10 @@ import java.util.Random;
 @Profile("producer")
 public class JobProducer {
 
-    @Value("${rabbit.exchange}")
+    @Value("${rabbit.jobs.exchange}")
     private String exchangeName;
 
-    @Value("${rabbit.queue}")
-    private String queueName;
-
-    @Value("${rabbit.routingKey}")
+    @Value("${rabbit.jobs.routingKey}")
     private String routingKey;
 
     private static final Logger log = LoggerFactory.getLogger(JobProducer.class);

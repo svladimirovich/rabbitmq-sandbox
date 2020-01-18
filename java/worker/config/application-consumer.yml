@@ -3,6 +3,9 @@ spring.profiles: consumer
 spring.rabbitmq.host: rabbit
 
 rabbit:
-  exchange: example_exch
-  queue: example_queue
-  routingKey: anykey
+  jobs:
+    exchange: jobs_exchange
+    routingKey: job_producer
+    queue: jobs_queue
+  results:
+    routingKey: result_producer

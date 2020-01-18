@@ -13,13 +13,13 @@ import org.springframework.context.annotation.Bean;
 @org.springframework.context.annotation.Configuration
 public class Configuration {
 
-    @Value("${rabbit.exchange}")
+    @Value("${rabbit.jobs.exchange}")
     private String exchangeName;
 
-    @Value("${rabbit.queue}")
+    @Value("${rabbit.jobs.queue}")
     private String queueName;
 
-    @Value("${rabbit.routingKey}")
+    @Value("${rabbit.jobs.routingKey}")
     private String routingKey;
 
     @Bean
