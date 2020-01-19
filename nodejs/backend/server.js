@@ -78,6 +78,10 @@ function consumeResults(routingKey) {
         });
     }).catch(error => {
         console.log("Error during consumption:", error);
+        // retry until connected
+        setTimeout(_ => {
+            consumeResults(routingKey);
+        }, 3000);
     })
 }
 
