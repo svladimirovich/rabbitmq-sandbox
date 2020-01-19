@@ -5,8 +5,8 @@ services:
   rabbit:
     image: rabbitmq:management
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - 5672:5672
+      - 15672:15672
     # healthcheck:
     #   test: ["CMD", "curl", "-f", "http://localhost:15672"]
     #   interval: 30s
@@ -34,6 +34,20 @@ services:
       - SPRING_PROFILES_ACTIVE=producer
     depends_on:
       - rabbit
+
+  wshost:
+    build:
+      dockerfile: Dockerfile
+      context: ./nodejs/backend
+    ports:
+      - 8080:8080
+    environment:
+      - TARGET_QUEUE=jobs_queue
+      - RESULT_ROUTING_KEY=result_producer
+      - RABBIT_HOST=rabbit
+    depends_on:
+      - rabbit
+      
 
       
 # still not working
