@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Job Monitor</title>
+    <style>
+        html, body {
+            background-color: rgb(255, 246, 227);
+            margin: 0;
+            height: 100%;
+        }
+        .left {
+            float: left;
+            height: 100%;
+            width: 80%;
+            overflow: scroll;
+            overflow-wrap: normal;
+        }
+        .right {
+            font-family: 'Courier New', Courier, monospace;
+            float: right;
+            width: 20%;
+        }
+        .subtitle {
+            font-size: smaller;
+        }
+        DIV.frame {
+            margin: 8px;
+        }
+        SPAN.creator, SPAN.executor, SPAN.time {
+            color: gray;
+            padding: 0 10px 0 0;
+        }
+        SPAN.title {
+            padding: 0 30px 0 20px;
+        }
+        SPAN.host {
+            color: darkblue;
+        }
+        SPAN.duration {
+            color: gray;
+        }
+        IMG.platform {
+            padding: 0 4px 4px 4px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.js" integrity="sha256-H9jAz//QLkDOy/nzE9G4aYijQtkLt9FvGmdUTwBk6gs=" crossorigin="anonymous"></script>
+    <script src="index.js" defer></script>
+</head>
+<body>
+    <div class="left">
+        <div class="frame">
+            <code id="messages">                
+            </code>
+        </div>
+    </div>
+    <div class="right">
+        <div class="frame">
+            <span><b>Jobs Queue</b><br/></span>
+            <span class="subtitle"><b>Size:</b></span> <span id="queueSize"></span><br/>
+            <span class="subtitle"><b>Consumers:</b></span> <span id="queueConsumerCount"></span><br/>
+            <span class="subtitle"><b>State:</b></span> <span id="queueState"></span><br/>
+            <span class="subtitle"><b>Error:</b></span> <span id="queueError"></span><br/>            
+        </div>
+    </div>    
+</body>
+</html>
