@@ -13,7 +13,9 @@ public class Job implements Serializable {
     private int amount;
     private Date createDate;
     private String creator;
+    private String creatorPlatform;
     private String executor;
+    private String executorPlatform;
     private Date executionDate;
 
     public Job(@JsonProperty("text") String title,
@@ -21,6 +23,7 @@ public class Job implements Serializable {
         this.title = title;
         this.amount = amount;
         this.createDate = new Date();
+        this.creatorPlatform = "java";
         try {
             this.creator = InetAddress.getLocalHost().getHostName();
         } catch(UnknownHostException e) {
@@ -60,8 +63,24 @@ public class Job implements Serializable {
         this.creator = creator;
     }
 
+    public String getCreatorPlatform() {
+        return creatorPlatform;
+    }
+
+    public void setCreatorPlatform(String creatorPlatform) {
+        this.creatorPlatform = creatorPlatform;
+    }
+
     public String getExecutor() {
         return executor;
+    }
+
+    public String getExecutorPlatform() {
+        return executorPlatform;
+    }
+
+    public void setExecutorPlatform(String executorPlatform) {
+        this.executorPlatform = executorPlatform;
     }
 
     public void setExecutor(String executor) {

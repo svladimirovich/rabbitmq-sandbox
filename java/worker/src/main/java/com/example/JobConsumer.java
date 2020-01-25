@@ -39,6 +39,7 @@ public class JobConsumer {
             } catch(UnknownHostException e) {
                 job.setExecutor("Unknown Host");
             }
+            job.setExecutorPlatform("java");
             rabbitTemplate.convertAndSend(exchangeName, routingKey, job);
         } catch(InterruptedException ie) {}
         log.info("Received job: {}", job.toString());
