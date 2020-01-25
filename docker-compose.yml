@@ -40,7 +40,7 @@ services:
       dockerfile: Dockerfile
       context: ./nodejs/backend
     ports:
-      - 8080:8080
+      - 8090:8080
     environment:
       - TARGET_QUEUE=jobs_queue
       - RESULT_ROUTING_KEY=result_producer
@@ -48,7 +48,18 @@ services:
     depends_on:
       - rabbit
       
-
+  monitor:
+    build:
+      dockerfile: Dockerfile
+      context: ./nodejs/frontend
+      # args:
+      #   WS_HOST: wshost:8080
+    ports:
+      - 8080:80
+    depends_on:
+      - wshost
+    volumes:
+      - ./nodejs/frontend:/usr/share/nginx/html
       
 # still not working
 # volumes:
