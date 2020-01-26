@@ -14,6 +14,7 @@ services:
     #   retries: 5
 
   java-consumer:
+    image: svladimirovich/java-worker
     build:
       dockerfile: dev.Dockerfile
       context: ./java/worker
@@ -25,6 +26,7 @@ services:
       - rabbit
       
   java-producer:
+    image: svladimirovich/java-worker
     build:
       dockerfile: dev.Dockerfile
       context: ./java/worker
@@ -36,6 +38,7 @@ services:
       - rabbit
 
   wshost:
+    image: svladimirovich/wshost
     build:
       dockerfile: Dockerfile
       context: ./nodejs/backend
@@ -49,6 +52,7 @@ services:
       - rabbit
       
   monitor:
+    image: svladimirovich/monitor
     build:
       dockerfile: Dockerfile
       context: ./nodejs/frontend
