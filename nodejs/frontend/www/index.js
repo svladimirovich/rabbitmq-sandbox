@@ -3,7 +3,7 @@ const queueSize = document.getElementById('queueSize');
 const queueConsumerCount = document.getElementById('queueConsumerCount');
 const queueState = document.getElementById('queueState');
 
-const ws = new WebSocket("ws://localhost:8090");
+const ws = new WebSocket("ws://localhost:8080/ws");
 
 function appendMessage(value) {
     const messageBlock = document.createTextNode(value);

@@ -56,14 +56,14 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./nodejs/frontend
-      # args:
-      #   WS_HOST: wshost:8080
+      args:
+        WS_HOST: wshost:8080
     ports:
       - 8080:80
     depends_on:
       - wshost
     volumes:
-      - ./nodejs/frontend:/usr/share/nginx/html
+      - ./nodejs/frontend/www:/usr/share/nginx/html
       
 # still not working
 # volumes:
