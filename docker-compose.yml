@@ -1,4 +1,4 @@
-version: "3.1"
+version: "3.7"
 
 services:
 
@@ -65,6 +65,17 @@ services:
     # This would be a problem if compose file used in swarm
     # volumes:
     #   - ./nodejs/frontend/www:/usr/share/nginx/html
+
+  # This works only in swarm
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8100:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
       
 # still not working
 # volumes:
