@@ -9,3 +9,9 @@ rabbit:
     queue: jobs_queue
   results:
     routingKey: result_producer
+
+spring:
+  rabbitmq:
+    listener:
+      simple:
+        prefetch: 1
