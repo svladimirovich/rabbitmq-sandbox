@@ -3,14 +3,51 @@ package main
 import (
 	"log"
 	"time"
+	"strings"
+	"fmt"
+	"os"
 
 	"github.com/streadway/amqp"
 )
+
+type Message struct {
+	Title string
+	Amount int
+	CreateDate time.Time
+	Creator string
+	CreatorPlatform string
+	Executor string
+	ExecutorPlatform string
+	ExecutionDate time.Time
+}
+
+var hostName string
 
 func failOnError(err error, msg string) {
 	if err != nil {
 		log.Fatalf("%s: %s", msg, err)
 	}
+}
+
+func createMessage() Message {
+	msg := Message{
+		Title: "from GoLang job producer",
+		Amount: 5,
+		CreatorPlatform: "golang",
+	}
+	return msg
+}
+
+func toJSON(message Message) string {
+	var builder strings.Builder
+	builder.WriteString("{")
+	fmt.Fprintf(&builder, "\"title\":\"%s\",", message.Title)
+	fmt.Fprintf(&builder, "\"amount\":\"%d\",", message.Amount)
+	fmt.Fprintf(&builder, "\"createDate\":%d,", time.Now().UnixNano() / 1000000)
+	fmt.Fprintf(&builder, "\"creator\":\"%s\",", hostName)
+	fmt.Fprintf(&builder, "\"creatorPlatform\":\"%s\"", message.CreatorPlatform)
+	builder.WriteString("}")
+	return builder.String()
 }
 
 func produce() int {
@@ -25,7 +62,7 @@ func produce() int {
 	failOnError(err, "Failed to open a channel")
 	defer ch.Close()
 
-	err := ch.ExchangeDeclare(
+	err = ch.ExchangeDeclare(
 		"jobs_exchange",
 		"topic",
 		true,
@@ -37,14 +74,19 @@ func produce() int {
 	failOnError(err, "Failed to declare a queue")
 
 	for {
-		body := "Hello World!"
+
+		message := createMessage()
+		body := toJSON(message)
+
+		log.Printf(" Created message %s", body)
+
 		err = ch.Publish(
 			"jobs_exchange", // exchange
 			"job_producer", // routing key
 			false,  // mandatory
 			false,  // immediate
 			amqp.Publishing{
-				ContentType: "text/plain",
+				ContentType: "application/json",
 				Body:        []byte(body),
 			})
 		log.Printf(" [x] Sent %s", body)
@@ -56,6 +98,13 @@ func produce() int {
 }
 
 func main() {
+	hname, err := os.Hostname()
+	if err != nil {
+		failOnError(err, "Could not retrieve host name")
+	}
+	hostName = hname
+	log.Printf("Running on host %s", hostName)
+
 	delay := 5
 	for delay > 1 {
 		delay = produce();
