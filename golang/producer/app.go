@@ -51,7 +51,7 @@ func toJSON(message Message) string {
 }
 
 func produce() int {
-	conn, err := amqp.Dial("amqp://guest:guest@192.168.1.4:5672/")
+	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
 	 if err != nil {
 		log.Printf("Failed to connect to RabbitMQ, will retry in 3 seconds ...");
 		return 3;

@@ -37,6 +37,16 @@ services:
     depends_on:
       - rabbit
 
+  go-producer:
+    image: svladimirovich/go-producer
+    build:
+      dockerfile: Dockerfile
+      context: ./golang/producer
+      args:
+        RABBIT_HOST: rabbit:5672
+    depends_on:
+      - rabbit
+
   wshost:
     image: svladimirovich/wshost
     build:
@@ -63,19 +73,19 @@ services:
     depends_on:
       - wshost
     # This would be a problem if compose file used in swarm
-    # volumes:
-    #   - ./nodejs/frontend/www:/usr/share/nginx/html
+    volumes:
+      - ./nodejs/frontend/www:/usr/share/nginx/html
 
   # This works only in swarm
-  visualizer:
-    image: dockersamples/visualizer:stable
-    ports:
-      - "8100:8080"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-    deploy:
-      placement:
-        constraints: [node.role == manager]
+  # visualizer:
+  #   image: dockersamples/visualizer:stable
+  #   ports:
+  #     - "8100:8080"
+  #   volumes:
+  #     - "/var/run/docker.sock:/var/run/docker.sock"
+  #   deploy:
+  #     placement:
+  #       constraints: [node.role == manager]
       
 # still not working
 # volumes:
