@@ -2,8 +2,13 @@ const messages = document.getElementById('messages');
 const queueSize = document.getElementById('queueSize');
 const queueConsumerCount = document.getElementById('queueConsumerCount');
 const queueState = document.getElementById('queueState');
+const consumers = document.getElementById('consumers');
+const producers = document.getElementById('producers');
 
 const ws = new WebSocket(`ws://${location.host}/ws`);
+
+const registeredProducers = [];
+const registeredConsumers = [];
 
 function appendMessage(value) {
     const messageBlock = document.createTextNode(value);
@@ -22,8 +27,8 @@ function createPlatformIcon(platform) {
     return platformIcon;
 }
 
-function createPlatformSpan(platform, cssClass, title, host) {
-    const result = document.createElement("span");
+function createPlatformElement(parentElement, platform, cssClass, title, host) {
+    const result = document.createElement(parentElement);
     result.classList.add(cssClass);
     if (title) {
         result.append(document.createTextNode(title));
@@ -57,13 +62,13 @@ function getDurationSpan(job) {
 function appendJobResult(job) {
     const endlineElement = document.createElement("br");
     const resultSpan = document.createElement("span");
-    resultSpan.append(createPlatformSpan(job.creatorPlatform, 'creator', null, job.creator));
+    resultSpan.append(createPlatformElement("span", job.creatorPlatform, 'creator', null, job.creator));
 
     const titleSpan = document.createElement("span");
     titleSpan.append(document.createTextNode(job.title));
     titleSpan.classList.add('title');
     resultSpan.append(titleSpan);
-    resultSpan.append(createPlatformSpan(job.executorPlatform, 'executor', 'processed by', job.executor));
+    resultSpan.append(createPlatformElement("span", job.executorPlatform, 'executor', 'processed by', job.executor));
     messages.prepend(endlineElement);
     messages.prepend(getDurationSpan(job));
     messages.prepend(resultSpan);
@@ -72,6 +77,20 @@ function appendJobResult(job) {
     timeSpan.classList.add('time');
     timeSpan.append(document.createTextNode(moment(job.createDate).format("HH:mm:ss")));
     messages.prepend(timeSpan);
+}
+
+function registerProducers(id, platform) {
+    if (registeredProducers.indexOf(id) === -1) {
+        producers.append(createPlatformElement("div", platform, 'executor', null, id));
+        registeredProducers.push(id);
+    }
+}
+
+function registerConsumer(id, platform) {
+    if (registeredConsumers.indexOf(id) === -1) {
+        consumers.append(createPlatformElement("div", platform, 'executor', null, id));
+        registeredConsumers.push(id);
+    }
 }
 
 ws.onopen = () => appendMessage("websocket opened");
@@ -84,7 +103,8 @@ ws.onmessage = message => {
         queueState.innerText = messageObject.state;
         queueError.innerText = messageObject.error || '-';
     } else {
+        registerConsumer(messageObject.executor, messageObject.executorPlatform);
+        registerProducers(messageObject.creator, messageObject.creatorPlatform);
         appendJobResult(messageObject);
-        //appendMessage("websocket: " + message.data);
     }
 }

@@ -12,16 +12,16 @@
             height: 100%;
         }
         .left {
+            font-family: 'Courier New', Courier, monospace;
             float: left;
+            width: 20%;
+        }
+        .right {
+            float: right;
             height: 100%;
             width: 80%;
             overflow: scroll;
             overflow-wrap: normal;
-        }
-        .right {
-            font-family: 'Courier New', Courier, monospace;
-            float: right;
-            width: 20%;
         }
         .subtitle {
             font-size: smaller;
@@ -50,19 +50,33 @@
     <script src="index.js" defer></script>
 </head>
 <body>
-    <div class="left">
+    <div class="right">
         <div class="frame">
             <code id="messages">                
             </code>
         </div>
     </div>
-    <div class="right">
+    <div class="left">
         <div class="frame">
-            <span><b>Jobs Queue</b><br/></span>
+            <p><b>Jobs Queueue</b></p>
             <span class="subtitle"><b>Size:</b></span> <span id="queueSize"></span><br/>
             <span class="subtitle"><b>Consumers:</b></span> <span id="queueConsumerCount"></span><br/>
             <span class="subtitle"><b>State:</b></span> <span id="queueState"></span><br/>
             <span class="subtitle"><b>Error:</b></span> <span id="queueError"></span><br/>            
+        </div>
+        <br/>
+
+        <div class="frame">
+            <p><b>Producers</b></p>
+            <div id="producers">
+            </div>
+        </div>
+        <br/>
+
+        <div class="frame">
+            <p><b>Consumers</b></p>
+            <div id="consumers">
+            </div>
         </div>
     </div>    
 </body>
