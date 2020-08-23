@@ -1,47 +1,44 @@
 ﻿using System;
-using RabbitMQ.Client;
-using System.Text;
+using System.Collections;
+using System.Linq;
 
 namespace Producer
 {
-    class MessageProducer {
-
-        public MessageProducer() {
-
-        }
-
-        public void produce() {
-            var factory = new ConnectionFactory() { HostName = "localhost" };
-            using(var connection = factory.CreateConnection())
-            using(var channel = connection.CreateModel()) {
-                channel.QueueDeclare(queue: "hello",
-                    durable: false,
-                    exclusive: false,
-                    autoDelete: false,
-                    arguments: null);
-
-                string message = "Hello World!";
-                var body = Encoding.UTF8.GetBytes(message);
-
-                channel.BasicPublish(exchange: "",
-                    routingKey: "hello",
-                    basicProperties: null,
-                    body: body);
-                Console.WriteLine(" [x] Sent {0}", message);
-            }
-
-            Console.WriteLine(" Press [enter] to exit.");
-            Console.ReadLine();            
-        }
-    }
-
     class Program
     {
+        public static Random Random = new Random();
+
+        public static readonly string WorkerId = null;
+
         static void Main(string[] args)
         {
             Console.WriteLine("dotnet producer started...");
             var producer = new MessageProducer();
-            producer.produce();
+
+            while(true) {
+                try {
+                    producer.produce();
+                } catch(RabbitMQ.Client.Exceptions.BrokerUnreachableException ex) {
+                    Console.WriteLine($"Error while producing jobs to RabbitMQ:{producer.rabbitHost} Queue:{producer.queueName} - {ex.Message}");
+                    Console.WriteLine("Next retry in 3 seconds...");
+                    System.Threading.Thread.Sleep(3000);
+                }
+            }
+        }
+
+        static Program() {
+            Program.WorkerId = generateRandomHexString(12);
+        }
+
+        private static string generateRandomHexString(int maxLength) {
+            var hexString = getRandomHexChar(maxLength).Cast<string>().ToArray();
+            return String.Join("", hexString).ToLower();
+        }
+
+        private static IEnumerable getRandomHexChar(int maxLength) {
+            for (int i = 0; i < maxLength; i++) {
+                yield return Random.Next(16).ToString("X");
+            }
         }
     }
 }

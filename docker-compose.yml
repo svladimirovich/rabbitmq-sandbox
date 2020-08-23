@@ -13,6 +13,19 @@ services:
     #   timeout: 10s
     #   retries: 5
 
+  dotnet-producer:
+    image: svladimirovich/dotnet-producer
+    build:
+      dockerfile: Dockerfile
+      context: ./dotnet/Producer
+    environment: 
+      - RABBIT_HOST=rabbit
+      - TARGET_QUEUE=jobs_queue
+      - EXCHANGE=jobs_exchange
+      - TARGET_ROUTING_KEY=job_producer
+    depends_on:
+      - rabbit
+
   java-consumer:
     image: svladimirovich/java-worker
     build:
