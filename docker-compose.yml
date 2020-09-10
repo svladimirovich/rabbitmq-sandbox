@@ -60,6 +60,19 @@ services:
     depends_on:
       - rabbit
 
+  nodejs-consumer:
+    image: svladimirovich/nodejs-consumer
+    build:
+      dockerfile: Dockerfile
+      context: ./nodejs/consumer
+    environment:
+      - RABBIT_HOST=rabbit
+      - EXCHANGE=jobs_exchange
+      - SOURCE_QUEUE=jobs_queue
+      - SOURCE_ROUTING_KEY=job_producer
+      - TARGET_ROUTING_KEY=result_producer      
+
+
   wshost:
     image: svladimirovich/wshost
     build:
