@@ -98,9 +98,9 @@ services:
       - 8080:80
     depends_on:
       - wshost
-    # This would be a problem if compose file used in swarm
-    volumes:
-      - ./nodejs/frontend/www:/usr/share/nginx/html
+    # This is for development environment only and would generate error in swarm
+    # volumes:
+    #   - ./nodejs/frontend/www:/usr/share/nginx/html
 
   # This works only in swarm
   # visualizer:
